@@ -9,7 +9,7 @@ namespace Payward;
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2014 Payward, Inc
+ * Copyright (c) 2013 Payward, Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,16 +48,11 @@ class KrakenAPI
      * @param string $url base URL for Kraken API
      * @param string $version API version
      * @param bool $sslverify enable/disable SSL peer verification.  disable if using beta.api.kraken.com
+     * @param int $timeout Timeout (in ms) for cURL action
+     * @param int $connectTimeout Timout (in ms) for cURL connection
      */
-    function __construct($key, $secret, $url='https://api.kraken.com', $version='0', $sslverify=true)
+    function __construct($key, $secret, $url='https://api.kraken.com', $version='0', $sslverify=true, $timeout = 3000, $connectTimeout = 1000)
     {
-
-        /* check we have curl */
-        if(!function_exists('curl_init')) {
-         print "[ERROR] The Kraken API client requires that PHP is compiled with 'curl' support.\n";
-         exit(1);
-        }
-
         $this->key = $key;
         $this->secret = $secret;
         $this->url = $url;
@@ -69,15 +64,15 @@ class KrakenAPI
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_USERAGENT => 'Kraken PHP API Agent',
             CURLOPT_POST => true,
-            CURLOPT_RETURNTRANSFER => true)
-        );
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT_MS => $timeout,
+            CURLOPT_CONNECTTIMEOUT_MS => $connectTimeout
+        ));
     }
 
     function __destruct()
     {
-    	if(function_exists('curl_close')) {
-         curl_close($this->curl);
-	}
+        curl_close($this->curl);
     }
 
     /**
