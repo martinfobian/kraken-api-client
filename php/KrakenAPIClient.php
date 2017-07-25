@@ -139,13 +139,16 @@ class KrakenAPI
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $postdata);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $headers);
         $result = curl_exec($this->curl);
-        if($result===false)
+        $json = curl_exec($this->curl);
+        if ($json === false) {
             throw new KrakenAPIException('CURL error: ' . curl_error($this->curl));
+        }
 
         // decode results
-        $result = json_decode($result, true);
-        if(!is_array($result))
-            throw new KrakenAPIException('JSON decode error');
+        $result = json_decode($json, true);
+        if (!is_array($result)) {
+            throw new KrakenAPIException('JSON decode error: ' . var_export($json));
+        }
 
         return $result;
     }
