@@ -138,7 +138,6 @@ class KrakenAPI
         curl_setopt($this->curl, CURLOPT_URL, $this->url . $path);
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $postdata);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $headers);
-        $result = curl_exec($this->curl);
         $json = curl_exec($this->curl);
         if ($json === false) {
             throw new KrakenAPIException('CURL error: ' . curl_error($this->curl));
