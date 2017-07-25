@@ -100,7 +100,7 @@ class KrakenAPI
         // decode results
         $result = json_decode($json, true);
         if (!is_array($result)) {
-            throw new KrakenAPIException('JSON decode error: ' . var_export($json));
+            throw new KrakenAPIException('JSON decode error: ' . var_export($json, true));
         }
 
         return $result;
@@ -146,7 +146,7 @@ class KrakenAPI
         // decode results
         $result = json_decode($json, true);
         if (!is_array($result)) {
-            throw new KrakenAPIException('JSON decode error: ' . var_export($json));
+            throw new KrakenAPIException('JSON decode error: ' . var_export($json, true));
         }
 
         return $result;
